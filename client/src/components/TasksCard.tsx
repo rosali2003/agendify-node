@@ -3,9 +3,12 @@ import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 import { Table, TableBody } from "../ui/table";
 import Task from "./Task";
-import axios from 'axios';
+import axios from "axios";
 
+const serverUrl = process.env.REACT_APP_SERVER_URL;
+console.log('serverurl', serverUrl);
 interface Task {
+  id: Number;
   message: String;
   completed: boolean;
 }
@@ -18,19 +21,21 @@ const TasksCard = () => {
     setNewTaskMessage(event.target.value);
   };
 
-  const onClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+  const onClick = async (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
     // Check if newTaskMessage is not empty before adding
-    const newTask = { message: newTaskMessage, completed: false };
+    const newTask = { id: tasks.length + 1,  message: newTaskMessage, completed: false };
     if (newTaskMessage.trim() !== "") {
+      const result = await axios
+        .post(`${serverUrl}/add_task`, { data: newTask })
+        .then((response) => {
+          console.log(response.data);
+        })
+        .catch((error) => {
+          console.log("Error: ", error);
+        });
       setTasks((prevTasks) => [...prevTasks, newTask]);
       setNewTaskMessage(""); // Reset input field after adding
-    }
-
-    try {
-      const result = await axios.post('/add_task', newTask);
-    } catch (error) {
-      console.log(error);
     }
   };
 
