@@ -2,8 +2,10 @@ import express from 'express'
 import mongoose from 'mongoose'
 import dotenv from 'dotenv';
 import {Task} from './models/Task.js';
+// import {oauth} from './oauth.js';
+import cors from "cors";
 const app = express();
-const PORT = 5555;
+const PORT = 5000;
 dotenv.config();
 
 // Middleware for parsing request body
@@ -25,7 +27,7 @@ const newTask = {
 }
 
 
-app.post("/tasks", async (request, response) => {
+app.post("/add_task", async (request, response) => {
   try {
     if (!request.body.id || !request.body.message || !request.body.completed) {
       return response.status(400).send({
@@ -49,3 +51,5 @@ mongoose
   .catch((error) => {
     console.log(error);
   });
+
+

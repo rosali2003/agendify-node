@@ -8,7 +8,7 @@ const mongoose_1 = __importDefault(require("mongoose"));
 const dotenv_1 = __importDefault(require("dotenv"));
 const Task_js_1 = require("./models/Task.js");
 const app = (0, express_1.default)();
-const PORT = 5555;
+const PORT = 5000;
 dotenv_1.default.config();
 // Middleware for parsing request body
 app.use(express_1.default.json());
