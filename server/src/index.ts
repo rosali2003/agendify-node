@@ -85,3 +85,7 @@ mongoose
   .catch((error) => {
     console.log(error);
   });
+
+
+//move routes from this file to task_controller. if request matches /tasks/ forward to tasks_controller
+//or look up how to create controller in nodejs
