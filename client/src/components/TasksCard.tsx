@@ -31,7 +31,7 @@ const TasksCard = () => {
     };
     if (newTaskMessage.trim() !== "") {
       const result = await axios
-        .post(`${serverUrl}/add_task`, { data: newTask })
+        .post(`${serverUrl}/tasks/add_task`, { data: newTask })
         .then((response) => {
           console.log(response.data);
         })
