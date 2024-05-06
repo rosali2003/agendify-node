@@ -6,7 +6,7 @@ import {
   createNewTask,
   updateTaskCompleted,
   deleteAllTasks,
-} from "../controllers/task_controller";
+} from "../controllers/task_controller.js";
 
 console.log('enters task router');
 taskRouter.get("/", getAllTasks);

@@ -9,10 +9,8 @@ function App() {
         <div className="flex justify-end">
           <LoginHome />
         </div>
-        {/* <div className="h-screen"> */}
-          <div className="h-screen flex items-center justify-center">
-            <TasksCard />
-          {/* </div> */}
+        <div className="h-screen flex items-center justify-center">
+          <TasksCard />
         </div>
       </div>
     </div>
