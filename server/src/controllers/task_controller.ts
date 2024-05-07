@@ -1,5 +1,5 @@
-import { allPresent, present } from "../helper/helpers";
-import { Task } from "../models/Task";
+import { allPresent, present } from "../helper/helpers.js";
+import { Task } from "../models/Task.js";
 
 
 export const getAllTasks = async (request, response) => {
