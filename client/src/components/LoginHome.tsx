@@ -31,12 +31,12 @@ const AuthContextProvider = ({ children }: any) => {
   const [user, setUser] = useState(null);
 
   const checkLoginState = useCallback(async () => {
-    console.log("entering checkLoginState client")
+    console.log("entering checkLoginState client");
     try {
       const {
         data: { loggedIn: logged_in, user },
       } = await axios.get(`${serverUrl}/auth/logged_in`);
-      console.log('logged_in in checkLoginState', logged_in)
+      console.log("logged_in in checkLoginState", logged_in);
       setLoggedIn(logged_in);
       user && setUser(user);
     } catch (err) {
@@ -61,7 +61,7 @@ const Login = () => {
       const {
         data: { url },
       } = await axios.get(`${serverUrl}/auth/url`);
-      // Navigate to conset screen
+      // Navigate to consent screen
       window.location.assign(url);
     } catch (err) {
       console.log("authentication not successful");
@@ -70,7 +70,12 @@ const Login = () => {
   };
   return (
     <div className="m-7">
-      <Button variant="secondary" size="lg" onClick={handleLogin}>
+      <Button
+        className="login-logout-button"
+        variant="secondary"
+        size="lg"
+        onClick={handleLogin}
+      >
         <b>Login</b>
       </Button>
     </div>
@@ -87,7 +92,7 @@ const Dashboard = () => {
           // Get posts from server
           const {
             data: { posts },
-          } = await axios.get(`${serverUrl}/user/posts`);
+          } = await axios.get(`${serverUrl}/auth/user/posts`);
           setPosts(posts);
           console.log("posts:", posts);
         } catch (err) {
@@ -110,9 +115,17 @@ const Dashboard = () => {
   return (
     <>
       <h3>Dashboard</h3>
-      <button className="btn" onClick={handleLogout}>
-        Logout
-      </button>
+      <div className="m-7">
+        <Button
+          className="login-logout-button"
+          variant="secondary"
+          size="lg"
+          onClick={handleLogout}
+        >
+          <b>Logout</b>
+        </Button>
+      </div>
+
       <h4>{user?.name}</h4>
       <br />
       <p>{user?.email}</p>
@@ -147,7 +160,7 @@ const Callback = () => {
           );
           checkLoginState();
           navigate("/");
-          console.log("after callback")
+          console.log("after callback");
         } catch (err) {
           console.log("authentication not sucessful");
           console.error(err);

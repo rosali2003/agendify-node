@@ -14,3 +14,7 @@ export interface PostType {
   title: string;
   body: string;
 }
+
+export interface AddToToCalendarProps { 
+  
+}
