@@ -8,7 +8,6 @@ import { Task } from "./models/Task.js";
 import { taskRouter } from "./routes/taskRoutes.js";
 import { oauthRouter } from "./routes/oauthRoutes.js";
 const app = express();
-const PORT = 5000;
 dotenv.config();
 // Middleware for parsing request body
 app.use(
@@ -22,8 +21,8 @@ app.use(
 app.use("/tasks", taskRouter);
 app.use("/auth", oauthRouter);
 
-app.listen(PORT, () => {
-  console.log(`App is listening to port: ${PORT}`);
+app.listen(process.env.PORT, () => {
+  console.log(`App is listening to port: ${process.env.PORT}`);
 });
 
 mongoose
