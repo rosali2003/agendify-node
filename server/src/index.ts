@@ -6,7 +6,6 @@ import { allPresent, present } from "./helper/helpers";
 import { Task } from "./models/Task.js";
 import { taskRouter } from "./routes/taskRoutes";
 const app = express();
-const PORT = 5000;
 dotenv.config();
 // Middleware for parsing request body
 app.use(
@@ -18,8 +17,8 @@ app.use(
 );
 app.use(`/tasks`, taskRouter);
 
-app.listen(PORT, () => {
-  console.log(`App is listening to port: ${PORT}`);
+app.listen(process.env.PORT, () => {
+  console.log(`App is listening to port: ${process.env.PORT}`);
 });
 
 mongoose
