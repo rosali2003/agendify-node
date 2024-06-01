@@ -188,6 +188,14 @@ const event = {
   },
 };
 
+export const addTaskToCalendar = (_, res) => {
+  const calendar = google.calendar({ version: "v3", auth: oauth2Client });
+  calendar.events.insert({
+    calendarId: "primary",
+    requestBody: event,
+  });
+  res.send({ msg: "Done" });
+}
 // app.get("/auth/schedule_event", (req, res) => {
 //   const calendar = google.calendar({ version: "v3", auth: oauth2Client });
 //   calendar.events.insert({
