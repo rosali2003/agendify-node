@@ -1,5 +1,11 @@
-import axios from "axios";
+import { Button } from "../ui/button";
 import React, { useState } from "react";
+import { Input } from "../ui/input";
+import axios from "axios";
+import { DotsHorizontalIcon } from "@radix-ui/react-icons";
+import { Toast, ToastAction, ToastDescription } from "../ui/toast";
+import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuLabel } from "../ui/dropdown-menu";
+import { toast } from "../ui/use-toast";
 import { Checkbox } from "../ui/checkbox";
 import { TableCell, TableRow } from "../ui/table";
 import { TaskProps } from "./types";
@@ -7,6 +13,9 @@ const serverUrl = process.env.REACT_APP_SERVER_URL;
 
 const Task: React.FC<TaskProps> = ({ id, message, completed }) => {
   const [isChecked, setIsChecked] = useState<boolean>(false);
+  const [addDate, setAddDate] = useState<boolean>(false);
+  const [startDateTime, setStartDateTime] = useState<string>("");
+  const [endDateTime, setEndDateTime] = useState<string>("");
 
   const handleCheckboxChange = async () => {
     let updateTask: any;
@@ -28,18 +37,107 @@ const Task: React.FC<TaskProps> = ({ id, message, completed }) => {
       });
   };
 
+  const handleAddDate = () => {
+    setAddDate(true);
+  };
+
+  const handleAddToCalendar = async () => {
+    setAddDate(false);
+    const result = await axios
+      .get(`${serverUrl}/auth/schedule_event`)
+      .then((response) => {
+        console.log("response status: ", response.status);
+        console.log("response data: ", response.data);
+      })
+      .catch((error) => {
+        console.log("Error sending get request:", error);
+      });
+    toast({
+      title: "Scheduled: Catch up ",
+      description: "dnskngs",
+      action: <ToastAction altText="Goto schedule to undo">Undo</ToastAction>,
+    });
+  };
+
+  const handleSetEndDateTime = (event: any) => {
+    const endDate = event.target.value;
+    console.log("endDate", endDate);
+    if (endDate > startDateTime) {
+      setEndDateTime(endDate);
+    } else {
+      throw console.error("end date must be after start date");
+    }
+  };
+
   return (
     <div>
-      <TableRow key={id}>
+      <TableRow className="flex justify-between" key={id}>
+        <TableRow>
+          <TableCell>
+            <Checkbox
+              id={id.toString()}
+              checked={isChecked}
+              onCheckedChange={handleCheckboxChange}
+            />
+          </TableCell>
+          <TableCell>{message}</TableCell>
+        </TableRow>
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="ghost" className="h-8 w-8 p-0">
+              <span className="sr-only">Open menu</span>
+              <DotsHorizontalIcon className="h-4 w-4" />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end">
+          <DropdownMenuLabel>Actions</DropdownMenuLabel>
+            <DropdownMenuItem
+              onClick={() => console.log('hi')}
+            >
+              Delete Task
+            </DropdownMenuItem>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem>Add to Calendar</DropdownMenuItem>
+            <DropdownMenuItem>Update task</DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
         <TableCell>
-          <Checkbox
-            id={id.toString()}
-            checked={isChecked}
-            onCheckedChange={handleCheckboxChange}
-          />
+          <Button size="sm" onClick={handleAddDate}>
+            add Date
+          </Button>
         </TableCell>
-        <TableCell className="font-medium">{message}</TableCell>
       </TableRow>
+      {addDate && (
+        <div>
+          <div>
+            <label htmlFor="task-time-start">Start time:</label>
+
+            <input
+              type="datetime-local"
+              id="task-time-start"
+              name="meeting-time"
+              value={startDateTime}
+              onChange={(event) => {
+                setStartDateTime(event.target.value);
+              }}
+            />
+          </div>
+          <div>
+            <label htmlFor="task-time-end">End time:</label>
+
+            <input
+              type="datetime-local"
+              id="task-time-end"
+              name="meeting-time"
+              value={endDateTime}
+              onChange={handleSetEndDateTime}
+            />
+          </div>
+          <Button size="sm" onClick={handleAddToCalendar}>
+            Add To Calendar
+          </Button>
+        </div>
+      )}
     </div>
   );
 };
