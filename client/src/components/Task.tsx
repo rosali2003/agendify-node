@@ -1,10 +1,18 @@
 import { Button } from "../ui/button";
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
+import { context } from "./context";
 import { Input } from "../ui/input";
 import axios from "axios";
 import { DotsHorizontalIcon } from "@radix-ui/react-icons";
-import { Toast, ToastAction, ToastDescription } from "../ui/toast";
-import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuLabel } from "../ui/dropdown-menu";
+import { ToastAction } from "../ui/toast";
+import {
+  DropdownMenu,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuLabel,
+} from "../ui/dropdown-menu";
 import { toast } from "../ui/use-toast";
 import { Checkbox } from "../ui/checkbox";
 import { TableCell, TableRow } from "../ui/table";
@@ -17,6 +25,7 @@ const Task: React.FC<TaskProps> = ({ id, message, completed }) => {
   const [startDateTime, setStartDateTime] = useState<string>("");
   const [endDateTime, setEndDateTime] = useState<string>("");
 
+  //change checkbox value
   const handleCheckboxChange = async () => {
     let updateTask: any;
     //update React app
@@ -36,6 +45,8 @@ const Task: React.FC<TaskProps> = ({ id, message, completed }) => {
         console.log("Error sending patch request:", error);
       });
   };
+
+  const handleUpdateTask = () => {};
 
   const handleAddDate = () => {
     setAddDate(true);
@@ -69,6 +80,25 @@ const Task: React.FC<TaskProps> = ({ id, message, completed }) => {
     }
   };
 
+  const {tasks, setTasks} = useContext(context);
+  const handleDeleteOneTask = async () => {
+    const result = await axios
+      .delete(`${serverUrl}/task/delete_one`, { data: id })
+      .then((response) => {
+        console.log(`${response.data}`);
+        console.log(`${response.status}`);
+      })
+      .catch((error) => {
+        console.log("Error", error);
+      });
+
+    const newTasks = tasks.filter((task: any) => (Number(task.id) !== id));
+    console.log("typeof id in newTasks", typeof newTasks[0].id)
+    console.log("typeof id", typeof id)
+    console.log('newTasks', newTasks);
+    setTasks(newTasks);
+  };
+
   return (
     <div>
       <TableRow className="flex justify-between" key={id}>
@@ -90,22 +120,21 @@ const Task: React.FC<TaskProps> = ({ id, message, completed }) => {
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
-          <DropdownMenuLabel>Actions</DropdownMenuLabel>
-            <DropdownMenuItem
-              onClick={() => console.log('hi')}
-            >
+            <DropdownMenuLabel>Actions</DropdownMenuLabel>
+            <DropdownMenuItem onClick={handleDeleteOneTask}>
               Delete Task
             </DropdownMenuItem>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem>Add to Calendar</DropdownMenuItem>
+            <DropdownMenuItem onClick={handleAddDate}>
+              Add to Calendar
+            </DropdownMenuItem>
             <DropdownMenuItem>Update task</DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
-        <TableCell>
+        {/* <TableCell>
           <Button size="sm" onClick={handleAddDate}>
             add Date
           </Button>
-        </TableCell>
+        </TableCell> */}
       </TableRow>
       {addDate && (
         <div>

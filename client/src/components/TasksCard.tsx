@@ -1,4 +1,5 @@
-import React, { useState, ChangeEvent } from "react";
+import React, { useState, ChangeEvent, useEffect } from "react";
+import {context} from './context';
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 import { Table, TableBody } from "../ui/table";
@@ -20,6 +21,20 @@ const TasksCard = () => {
   const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
     setNewTaskMessage(event.target.value);
   };
+
+  useEffect(() => {
+    const fetchTasks = async () => {
+      try {
+        const response = await axios.get(`${serverUrl}/`);
+        setTasks(response.data);
+        console.log("Successfully retrieved all tasks");
+      } catch (error) {
+        console.log("Error", error);
+      }
+    };
+
+    fetchTasks();
+  }, []);
 
   const onClick = async (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
@@ -44,23 +59,25 @@ const TasksCard = () => {
   };
 
   const displayTasks = () => {
+    console.log("entering display tasks")
+    console.log("typeof Tasks", typeof tasks)
+    console.log(typeof [])
+    console.log("tasks in displaytasks", tasks)
     return tasks.map((task, index) => {
-      console.log("task.id", task.id);
+      console.log("Task", task);
       return (
-        <Task
-          id={index + 1}
-          message={task.message}
-          completed={task.completed}
-        />
+        <context.Provider value={{tasks, setTasks}}>
+          <Task
+            id={index + 1}
+            message={task.message}
+            completed={task.completed}
+          />
+          </context.Provider>
       );
     });
   };
 
   const onDeleteAllTasks = async () => {
-    // if (tasks.length === 0) {
-    //   return;
-    // }
-
     const result = await axios
       .delete(`${serverUrl}/tasks/delete_all`)
       .then((response) => {
