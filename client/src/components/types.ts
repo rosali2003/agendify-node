@@ -1,7 +1,5 @@
 export interface TaskProps {
-  id: number;
-  message: String;
-  completed: boolean;
+  task: any;
 }
 
 export interface AuthContextType {

@@ -5,6 +5,7 @@ import cors from "cors";
 import cookieParser from "cookie-parser";
 import { taskRouter } from "./routes/taskRoutes.js";
 import { oauthRouter } from "./routes/oauthRoutes.js";
+import { defaultRouter } from "./routes/defaultRoutes.js";
 const app = express();
 dotenv.config();
 // Middleware for parsing request body
@@ -14,6 +15,7 @@ app.use(express.json(), cookieParser(), cors({
 }));
 app.use("/tasks", taskRouter);
 app.use("/auth", oauthRouter);
+app.use("/", defaultRouter);
 app.listen(process.env.PORT, () => {
     console.log(`App is listening to port: ${process.env.PORT}`);
 });

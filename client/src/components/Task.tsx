@@ -1,28 +1,48 @@
 import { Button } from "../ui/button";
-import React, { useState } from "react";
+import React, { useState, useContext, useEffect } from "react";
+import { context } from "./context";
 import { Input } from "../ui/input";
 import axios from "axios";
 import { DotsHorizontalIcon } from "@radix-ui/react-icons";
-import { Toast, ToastAction, ToastDescription } from "../ui/toast";
-import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuLabel } from "../ui/dropdown-menu";
+import { ToastAction } from "../ui/toast";
+import {
+  DropdownMenu,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+} from "../ui/dropdown-menu";
 import { toast } from "../ui/use-toast";
 import { Checkbox } from "../ui/checkbox";
 import { TableCell, TableRow } from "../ui/table";
 import { TaskProps } from "./types";
 const serverUrl = process.env.REACT_APP_SERVER_URL;
 
-const Task: React.FC<TaskProps> = ({ id, message, completed }) => {
+const Task: React.FC<TaskProps> = ({ task }) => {
   const [isChecked, setIsChecked] = useState<boolean>(false);
   const [addDate, setAddDate] = useState<boolean>(false);
   const [startDateTime, setStartDateTime] = useState<string>("");
   const [endDateTime, setEndDateTime] = useState<string>("");
 
+  useEffect(() => {
+    console.log(task)
+    console.log('id', task.id);
+    console.log('message', task.message);
+  })
+
+  //change checkbox value
   const handleCheckboxChange = async () => {
     let updateTask: any;
     //update React app
     setIsChecked((prevState) => {
       const newState = !prevState;
-      updateTask = { id, message, completed: newState };
+      // updateTask = { id, message, completed: newState };
+      updateTask = {
+        _id: task._id,
+        id: task.id,
+        message: task.message,
+        completed: newState,
+      };
       return newState;
     });
     console.log("updateTask", updateTask);
@@ -36,6 +56,8 @@ const Task: React.FC<TaskProps> = ({ id, message, completed }) => {
         console.log("Error sending patch request:", error);
       });
   };
+
+  const handleUpdateTask = () => {};
 
   const handleAddDate = () => {
     setAddDate(true);
@@ -69,18 +91,34 @@ const Task: React.FC<TaskProps> = ({ id, message, completed }) => {
     }
   };
 
+  const { tasks, setTasks } = useContext(context);
+  const handleDeleteOneTask = async () => {
+    const result = await axios
+      .delete(`${serverUrl}/tasks/delete_one`, {params: {_id: task._id}})
+      .then((response) => {
+        console.log(`${response.data}`);
+        console.log(`${response.status}`);
+      })
+      .catch((error) => {
+        console.log("Error", error);
+      });
+
+    const newTasks = tasks.filter((t: any) => Number(t.id) !== task.id);
+    setTasks(newTasks);
+  };
+
   return (
     <div>
-      <TableRow className="flex justify-between" key={id}>
+      <TableRow className="flex justify-between" key={task.id}>
         <TableRow>
           <TableCell>
             <Checkbox
-              id={id.toString()}
+              id={task.id ? task.id.toString() : null}
               checked={isChecked}
               onCheckedChange={handleCheckboxChange}
             />
           </TableCell>
-          <TableCell>{message}</TableCell>
+          <TableCell>{task.message}</TableCell>
         </TableRow>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -90,22 +128,21 @@ const Task: React.FC<TaskProps> = ({ id, message, completed }) => {
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
-          <DropdownMenuLabel>Actions</DropdownMenuLabel>
-            <DropdownMenuItem
-              onClick={() => console.log('hi')}
-            >
+            <DropdownMenuLabel>Actions</DropdownMenuLabel>
+            <DropdownMenuItem onClick={handleDeleteOneTask}>
               Delete Task
             </DropdownMenuItem>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem>Add to Calendar</DropdownMenuItem>
+            <DropdownMenuItem onClick={handleAddDate}>
+              Add to Calendar
+            </DropdownMenuItem>
             <DropdownMenuItem>Update task</DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
-        <TableCell>
+        {/* <TableCell>
           <Button size="sm" onClick={handleAddDate}>
             add Date
           </Button>
-        </TableCell>
+        </TableCell> */}
       </TableRow>
       {addDate && (
         <div>

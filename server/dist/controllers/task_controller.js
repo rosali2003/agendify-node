@@ -1,16 +1,5 @@
 import { allPresent, present } from "../helper/helpers.js";
 import { Task } from "../models/Task.js";
-export const getAllTasks = async (request, response) => {
-    console.log("entering getAllTasks", request);
-    try {
-        const tasks = await Task.find();
-        return response.status(200).json(tasks);
-    }
-    catch (error) {
-        console.error("Error fetching tasks:", error);
-        return response.status(500).json({ message: "Internal Server Error" });
-    }
-};
 export const createNewTask = async (request, response) => {
     const data = request.body.data;
     console.log("data", data);
@@ -63,10 +52,16 @@ export const deleteAllTasks = async (req, res) => {
         res.status(400);
     }
 };
-// export const deleteOneTask = async (req, res) => {
-//   try {
-//     const result = await Task.findOneAndDelete({})
-//   } catch (error) {
-//   }
-// }
+export const deleteOneTask = async (req, res) => {
+    const data = req.query._id.toString();
+    try {
+        const result = await Task.deleteOne({ _id: data });
+        console.log("result", result);
+        res.status(200).json({ message: "Task successfully deleted" });
+    }
+    catch (error) {
+        console.log("Error deleting task", error);
+        res.status(404);
+    }
+};
 //# sourceMappingURL=task_controller.js.map
