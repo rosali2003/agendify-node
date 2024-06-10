@@ -1,6 +1,5 @@
 import { Task } from "../models/Task.js";
 export const getAllTasks = async (request, response) => {
-    console.log("entering getAllTasks", request);
     try {
         const tasks = await Task.find();
         return response.status(200).json(tasks);

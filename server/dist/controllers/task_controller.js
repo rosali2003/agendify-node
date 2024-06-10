@@ -52,10 +52,16 @@ export const deleteAllTasks = async (req, res) => {
         res.status(400);
     }
 };
-// export const deleteOneTask = async (req, res) => {
-//   try {
-//     const result = await Task.findOneAndDelete({})
-//   } catch (error) {
-//   }
-// }
+export const deleteOneTask = async (req, res) => {
+    const data = req.query._id.toString();
+    try {
+        const result = await Task.deleteOne({ _id: data });
+        console.log("result", result);
+        res.status(200).json({ message: "Task successfully deleted" });
+    }
+    catch (error) {
+        console.log("Error deleting task", error);
+        res.status(404);
+    }
+};
 //# sourceMappingURL=task_controller.js.map

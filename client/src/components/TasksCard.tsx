@@ -61,16 +61,14 @@ const TasksCard = () => {
   const displayTasks = () => {
     console.log("entering display tasks")
     console.log("typeof Tasks", typeof tasks)
-    console.log(typeof [])
-    console.log("tasks in displaytasks", tasks)
+    console.log("tasks in displaytasks", typeof tasks)
     return tasks.map((task, index) => {
-      console.log("Task", task);
+      console.log('entering')
+      console.log("Task message", task.message);
       return (
         <context.Provider value={{tasks, setTasks}}>
           <Task
-            id={index + 1}
-            message={task.message}
-            completed={task.completed}
+            task={task}
           />
           </context.Provider>
       );

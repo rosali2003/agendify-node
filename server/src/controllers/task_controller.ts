@@ -1,3 +1,4 @@
+import mongoose from 'mongoose';
 import { allPresent, present } from "../helper/helpers.js";
 import { Task } from "../models/Task.js";
 
@@ -56,11 +57,12 @@ export const deleteAllTasks = async (req, res) => {
 };
 
 export const deleteOneTask = async (req, res) => {
-  const data = req.body.data;
+  const data = req.query._id.toString();
+
   try {
-    const filter = {id: data.id}
-    
-    const result = await Task.findOneAndDelete({req.id})
+    const result = await Task.deleteOne({_id: data});
+    console.log("result", result);
+    res.status(200).json({ message: "Task successfully deleted" });
   } catch (error) {
     console.log("Error deleting task", error);
     res.status(404);
