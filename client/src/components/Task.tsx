@@ -25,10 +25,10 @@ const Task: React.FC<TaskProps> = ({ task }) => {
   const [endDateTime, setEndDateTime] = useState<string>("");
 
   useEffect(() => {
-    console.log(task)
-    console.log('id', task.id);
-    console.log('message', task.message);
-  })
+    console.log(task);
+    console.log("id", task.id);
+    console.log("message", task.message);
+  });
 
   //change checkbox value
   const handleCheckboxChange = async () => {
@@ -94,7 +94,7 @@ const Task: React.FC<TaskProps> = ({ task }) => {
   const { tasks, setTasks } = useContext(context);
   const handleDeleteOneTask = async () => {
     const result = await axios
-      .delete(`${serverUrl}/tasks/delete_one`, {params: {_id: task._id}})
+      .delete(`${serverUrl}/tasks/delete_one`, { params: { _id: task._id } })
       .then((response) => {
         console.log(`${response.data}`);
         console.log(`${response.status}`);
@@ -110,34 +110,36 @@ const Task: React.FC<TaskProps> = ({ task }) => {
   return (
     <div>
       <TableRow className="flex justify-between" key={task.id}>
-        <TableRow>
-          <TableCell>
-            <Checkbox
-              id={task.id ? task.id.toString() : null}
-              checked={isChecked}
-              onCheckedChange={handleCheckboxChange}
-            />
-          </TableCell>
-          <TableCell>{task.message}</TableCell>
-        </TableRow>
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" className="h-8 w-8 p-0">
-              <span className="sr-only">Open menu</span>
-              <DotsHorizontalIcon className="h-4 w-4" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuLabel>Actions</DropdownMenuLabel>
-            <DropdownMenuItem onClick={handleDeleteOneTask}>
-              Delete Task
-            </DropdownMenuItem>
-            <DropdownMenuItem onClick={handleAddDate}>
-              Add to Calendar
-            </DropdownMenuItem>
-            <DropdownMenuItem>Update task</DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
+        {/* <TableRow> */}
+        <TableCell>
+          <Checkbox
+            id={task.id ? task.id.toString() : null}
+            checked={isChecked}
+            onCheckedChange={handleCheckboxChange}
+          />
+        </TableCell>
+        <TableCell>{task.message}</TableCell>
+        {/* </TableRow> */}
+        <TableCell>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" className="h-8 w-8 p-0">
+                <span className="sr-only">Open menu</span>
+                <DotsHorizontalIcon className="h-4 w-4" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuLabel>Actions</DropdownMenuLabel>
+              <DropdownMenuItem onClick={handleDeleteOneTask}>
+                Delete Task
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={handleAddDate}>
+                Add to Calendar
+              </DropdownMenuItem>
+              <DropdownMenuItem>Update task</DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </TableCell>
         {/* <TableCell>
           <Button size="sm" onClick={handleAddDate}>
             add Date
