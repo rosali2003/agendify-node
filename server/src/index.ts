@@ -15,7 +15,8 @@ app.use(
   express.json(),
   cookieParser(),
   cors({
-    origin: [process.env.CLIENT_URL],
+    origin: ["agendify-node-frontend.vercel.app"],
+    methods: ["POST", "GET", "PUT"],
     credentials: true,
   })
 );
