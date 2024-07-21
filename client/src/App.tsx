@@ -9,9 +9,10 @@ function App() {
         {/* <div className="flex justify-end">
           <LoginHome />
         </div> */}
-        <div className="flex items-center justify-center">
+        <h1>hello</h1>
+        {/* <div className="flex items-center justify-center">
           <TasksCard />
-        </div>
+        </div> */}
       </div>
     </div>
   );
