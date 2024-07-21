@@ -11,8 +11,7 @@ dotenv.config();
 const port = process.env.PORT || 5000;
 // Middleware for parsing request body
 app.use(express.json(), cookieParser(), cors({
-    origin: "http://localhost:3000",
-    methods: ["POST", "GET", "PUT"],
+    origin: process.env.CLIENT_URL,
     credentials: true,
 }));
 app.use("/tasks", taskRouter);
@@ -21,6 +20,7 @@ app.use("/", defaultRouter);
 app.listen(port, () => {
     console.log(`App is listening to port: ${port}`);
 });
+console.log('client url', process.env.CLIENT_URL);
 mongoose
     .connect(process.env.URI)
     .then(() => {

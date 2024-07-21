@@ -11,13 +11,14 @@ import {defaultRouter} from "./routes/defaultRoutes.js";
 const app = express();
 dotenv.config();
 const port = process.env.PORT || 5000;
+console.log("entering server")
+
 // Middleware for parsing request body
 app.use(
   express.json(),
   cookieParser(),
   cors({
     origin: process.env.CLIENT_URL,
-    methods: ["POST", "GET", "PUT"],
     credentials: true,
   })
 );
