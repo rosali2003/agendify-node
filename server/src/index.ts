@@ -29,6 +29,8 @@ app.listen(port, () => {
   console.log(`App is listening to port: ${port}`);
 });
 
+console.log('client url', process.env.CLIENT_URL);
+
 mongoose
   .connect(process.env.URI)
   .then(() => {
