@@ -1,5 +1,5 @@
 import React, { useState, ChangeEvent, useEffect } from "react";
-import {context} from './context';
+import { context } from "./context";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 import { Table, TableBody } from "../ui/table";
@@ -59,20 +59,22 @@ const TasksCard = () => {
   };
 
   const displayTasks = () => {
-    console.log("entering display tasks")
-    console.log("typeof Tasks", typeof tasks)
-    console.log("tasks in displaytasks", typeof tasks)
-    return tasks.map((task, index) => {
-      console.log('entering')
-      console.log("Task message", task.message);
-      return (
-        <context.Provider value={{tasks, setTasks}}>
-          <Task
-            task={task}
-          />
+    console.log("entering display tasks");
+    console.log("typeof Tasks", typeof tasks);
+    console.log("tasks in displaytasks", tasks);
+    try {
+      return tasks.map((task, index) => {
+        console.log("entering");
+        console.log("Task message", task.message);
+        return (
+          <context.Provider value={{ tasks, setTasks }}>
+            <Task task={task} />
           </context.Provider>
-      );
-    });
+        );
+      });
+    } catch (error) {
+      console.log(`Error ${error}`)
+    }
   };
 
   const onDeleteAllTasks = async () => {
