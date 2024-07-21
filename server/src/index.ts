@@ -10,7 +10,7 @@ import { oauthRouter } from "./routes/oauthRoutes.js";
 import {defaultRouter} from "./routes/defaultRoutes.js";
 const app = express();
 dotenv.config();
-const port = process.env.PORT || 3001;
+const port = process.env.PORT || 3000;
 // Middleware for parsing request body
 app.use(
   express.json(),
