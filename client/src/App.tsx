@@ -6,9 +6,9 @@ function App() {
   return (
     <div className="bg-primary h-screen w-screen">
       <div>
-        <div className="flex justify-end">
+        {/* <div className="flex justify-end">
           <LoginHome />
-        </div>
+        </div> */}
         <div className="flex items-center justify-center">
           <TasksCard />
         </div>
